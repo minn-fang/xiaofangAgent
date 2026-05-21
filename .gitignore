@@ -1,0 +1,25 @@
+# 依赖目录
+node_modules/
+bower_components/
+vendor/
+
+# 构建输出
+dist/
+build/
+out/
+target/
+
+# 环境变量与敏感配置
+.env
+.env.local
+*.key
+
+# IDE 配置文件
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
