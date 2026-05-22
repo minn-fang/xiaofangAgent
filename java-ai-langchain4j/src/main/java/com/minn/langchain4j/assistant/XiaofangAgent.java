@@ -20,4 +20,5 @@ public interface XiaofangAgent {
         
         @SystemMessage(fromResource = "xiaofangAgent-prompt.txt")
         Flux<String> chat(@MemoryId Long memoryId , @UserMessage String userMessage);
+       //String chat(@MemoryId Long memoryId , @UserMessage String userMessage);
 }
