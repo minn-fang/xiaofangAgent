@@ -6,9 +6,16 @@ import com.minn.langchain4j.entity.Appointment;
 import com.minn.langchain4j.mapper.AppointmentMapper;
 import com.minn.langchain4j.service.AppointmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appointment> implements AppointmentService {
+        @Override
+        @Transactional (rollbackFor = Exception.class)
+        public boolean save(Appointment appointment) {
+                return super.save(appointment);
+        }
+        
         /**
          * 查询订单是否存在
          * @param appointment

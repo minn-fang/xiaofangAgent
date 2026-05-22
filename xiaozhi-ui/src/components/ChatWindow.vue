@@ -117,18 +117,32 @@ const sendRequest = (message) => {
   const lastMsg = messages.value[messages.value.length - 1]
   scrollToBottom()
 
+  let previousLength = 0 // 记录上一次处理的文本长度
+
   axios
     .post(
       '/api/xiaofang/chat',
       { memoryId: uuid.value, message },
       {
-        responseType: 'stream', // 必须为合法值 "text"
+        // responseType: 'stream', // 必须为合法值 "text"
+        responseType: 'text', // 必须为合法值 "text"
         onDownloadProgress: (e) => {
           const fullText = e.event.target.responseText // 累积的完整文本
-          let newText = fullText.substring(lastMsg.content.length)
-          lastMsg.content += newText //增量更新
-          console.log(lastMsg)
-          scrollToBottom() // 实时滚动
+          const newText = fullText.substring(previousLength)
+          // let newText = fullText.substring(lastMsg.content.length)
+          // // lastMsg.content += newText //增量更新
+          // previousLength = fullText.length
+          // const convertedText = convertStreamOutput(newText)
+          // lastMsg.content += convertedText //增量更新
+          // console.log(lastMsg)
+          // scrollToBottom() // 实时滚动
+          previousLength = fullText.length
+          if (newText) {
+            const convertedText = convertStreamOutput(newText)
+            lastMsg.content += convertedText
+            console.log(lastMsg)
+            scrollToBottom()
+          }
         },
       }
     )
@@ -165,15 +179,23 @@ const uuidToNumber = (uuid) => {
 }
 
 // 转换特殊字符
+// const convertStreamOutput = (output) => {
+//   return output
+//     .replace(/\n/g, '<br>')
+//     .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+//     .replace(/&/g, '&amp;') // 新增转义，避免 HTML 注入
+//     .replace(/</g, '&lt;')
+//     .replace(/>/g, '&gt;')
+// }
 const convertStreamOutput = (output) => {
   return output
-    .replace(/\n/g, '<br>')
+    .replace(/&/g, '&amp;')      // 1. 先转义 &
+    .replace(/</g, '&lt;')       // 2. 再转义 <
+    .replace(/>/g, '&gt;')       // 3. 再转义 >
+    .replace(/\n/g, '<br>')      // 4. 最后替换换行为 <br>
     .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-    .replace(/&/g, '&amp;') // 新增转义，避免 HTML 注入
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // 5. 替换加粗
 }
-
 const newChat = () => {
   // 这里添加新会话的逻辑
   console.log('开始新会话')
