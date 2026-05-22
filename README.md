@@ -5,6 +5,7 @@
 <img width="1915" height="1025" alt="小方施主（医疗版）2" src="https://github.com/user-attachments/assets/d52ddb76-0917-4890-8353-f21f339e50f3" />
 <img width="1905" height="1016" alt="小方施主（医疗版）3" src="https://github.com/user-attachments/assets/6393e4b2-2ea0-4eae-a0d2-a294163ab3ce" />
 <img width="700" height="153" alt="小方施主（医疗版）4" src="https://github.com/user-attachments/assets/0b8c85a5-504b-4ae3-8d40-20b88fc65764" />
-<img width="1080" height="2376" alt="小方施主（医疗版，手机页面）" src="https://github.com/user-attachments/assets/fef471c2-4c73-421e-bc7f-597cad63a0ca" />
+<img width="1200" height="2670" alt="小方施主（医疗版，手机页面）" src="https://github.com/user-attachments/assets/ae7d7de5-5655-4f1b-9d1a-de1658875b53" />
+
 
 
