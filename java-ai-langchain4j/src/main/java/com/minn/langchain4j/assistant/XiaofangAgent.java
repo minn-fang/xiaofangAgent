@@ -7,6 +7,8 @@ import dev.langchain4j.service.spring.AiService;
 import dev.langchain4j.service.spring.AiServiceWiringMode;
 import reactor.core.publisher.Flux;
 
+
+
 @AiService(
         wiringMode = AiServiceWiringMode.EXPLICIT,
         //chatModel = "qwenChatModel",
@@ -17,7 +19,6 @@ import reactor.core.publisher.Flux;
 )
 
 public interface XiaofangAgent {
-        
         @SystemMessage(fromResource = "xiaofangAgent-prompt.txt")
         Flux<String> chat(@MemoryId Long memoryId , @UserMessage String userMessage);
        //String chat(@MemoryId Long memoryId , @UserMessage String userMessage);

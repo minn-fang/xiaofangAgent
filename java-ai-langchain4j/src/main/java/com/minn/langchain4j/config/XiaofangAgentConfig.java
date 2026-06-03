@@ -1,6 +1,7 @@
 package com.minn.langchain4j.config;
 
 import com.minn.langchain4j.store.MongoChatMemoryStore;
+import com.minn.langchain4j.store.MultiLevelChatMemoryStore;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.segment.TextSegment;
@@ -25,13 +26,16 @@ public class XiaofangAgentConfig {
         @Autowired
         private MongoChatMemoryStore mongoChatMemoryStore;
         
+        @Autowired
+        private MultiLevelChatMemoryStore multiLevelChatMemoryStore;
+        
         @Bean
         public ChatMemoryProvider chatMemoryProviderXiaofang(){
                 return memoryId -> MessageWindowChatMemory
                                            .builder ()
                                            .id(memoryId)
                                            .maxMessages(20)
-                                           .chatMemoryStore(mongoChatMemoryStore)
+                                           .chatMemoryStore(multiLevelChatMemoryStore)
                                            .build();
         }
         

@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, nextTick } from 'vue'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -67,12 +67,18 @@ const isSending = ref(false)
 const uuid = ref()
 const inputMessage = ref('')
 const messages = ref([])
+const isHistoryLoaded = ref(false) // 标记历史记录是否已加载
 
 onMounted(() => {
   initUUID()
-  // 移除 setInterval，改用手动滚动
-  watch(messages, () => scrollToBottom(), { deep: true })
-  hello()
+  
+  // 监听消息变化自动滚动
+  watch(messages, () => {
+    nextTick(() => scrollToBottom())
+  }, { deep: true })
+  
+  // 加载历史记录
+  loadHistory()
 })
 
 const scrollToBottom = () => {
@@ -81,30 +87,74 @@ const scrollToBottom = () => {
   }
 }
 
+// 加载历史记录
+const loadHistory = async () => {
+  try {
+    console.log('开始加载历史记录, memoryId:', uuid.value)
+    
+    const response = await axios.get(`/api/xiaofang/history/${uuid.value}`)
+    const history = response.data
+    
+    console.log('历史记录响应:', history)
+    
+    if (history && history.hasHistory && history.messages && history.messages.length > 0) {
+      // 将历史消息转换为前端格式
+      history.messages.forEach(msg => {
+        messages.value.push({
+          isUser: msg.role === 'user',
+          content: msg.content,
+          isTyping: false,
+          isThinking: false,
+        })
+      })
+      
+      isHistoryLoaded.value = true
+      console.log(`成功加载 ${history.messages.length} 条历史记录`)
+      
+      await nextTick()
+      scrollToBottom()
+    } else {
+      console.log('没有历史记录，发送默认问候')
+      isHistoryLoaded.value = true
+      // 没有历史记录才发送默认问候
+      hello()
+    }
+  } catch (error) {
+    console.error('加载历史记录失败:', error)
+    isHistoryLoaded.value = true
+    // 加载失败时发送默认问候
+    hello()
+  }
+}
+
 const hello = () => {
-  sendRequest('你好')
+  // 只有在历史记录加载完成后才发送问候
+  if (isHistoryLoaded.value) {
+    sendRequest('你好', true)
+  }
 }
 
 const sendMessage = () => {
   if (inputMessage.value.trim()) {
-    sendRequest(inputMessage.value.trim())
+    sendRequest(inputMessage.value.trim(), false)
     inputMessage.value = ''
   }
 }
 
-const sendRequest = (message) => {
+const sendRequest = (message, isHello = false) => {
   isSending.value = true
+  
   const userMsg = {
     isUser: true,
     content: message,
     isTyping: false,
     isThinking: false,
   }
-  //第一条默认发送的用户消息”你好“不放入会话列表
-  if(messages.value.length > 0){
+  
+  // 第一条默认发送的用户消息"你好"不放入会话列表
+  if (messages.value.length > 0 || !isHello) {
     messages.value.push(userMsg)
   }
-
 
   // 添加机器人加载消息
   const botMsg = {
@@ -115,7 +165,8 @@ const sendRequest = (message) => {
   }
   messages.value.push(botMsg)
   const lastMsg = messages.value[messages.value.length - 1]
-  scrollToBottom()
+  
+  nextTick(() => scrollToBottom())
 
   let previousLength = 0 // 记录上一次处理的文本长度
 
@@ -124,24 +175,17 @@ const sendRequest = (message) => {
       '/api/xiaofang/chat',
       { memoryId: uuid.value, message },
       {
-        // responseType: 'stream', // 必须为合法值 "text"
-        responseType: 'text', // 必须为合法值 "text"
+        responseType: 'text',
         onDownloadProgress: (e) => {
           const fullText = e.event.target.responseText // 累积的完整文本
           const newText = fullText.substring(previousLength)
-          // let newText = fullText.substring(lastMsg.content.length)
-          // // lastMsg.content += newText //增量更新
-          // previousLength = fullText.length
-          // const convertedText = convertStreamOutput(newText)
-          // lastMsg.content += convertedText //增量更新
-          // console.log(lastMsg)
-          // scrollToBottom() // 实时滚动
+          
           previousLength = fullText.length
+          
           if (newText) {
             const convertedText = convertStreamOutput(newText)
             lastMsg.content += convertedText
-            console.log(lastMsg)
-            scrollToBottom()
+            nextTick(() => scrollToBottom())
           }
         },
       }
@@ -167,6 +211,7 @@ const initUUID = () => {
     localStorage.setItem('user_uuid', storedUUID)
   }
   uuid.value = storedUUID
+  console.log('当前 memoryId:', uuid.value)
 }
 
 const uuidToNumber = (uuid) => {
@@ -179,14 +224,6 @@ const uuidToNumber = (uuid) => {
 }
 
 // 转换特殊字符
-// const convertStreamOutput = (output) => {
-//   return output
-//     .replace(/\n/g, '<br>')
-//     .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-//     .replace(/&/g, '&amp;') // 新增转义，避免 HTML 注入
-//     .replace(/</g, '&lt;')
-//     .replace(/>/g, '&gt;')
-// }
 const convertStreamOutput = (output) => {
   return output
     .replace(/&/g, '&amp;')      // 1. 先转义 &
@@ -196,14 +233,15 @@ const convertStreamOutput = (output) => {
     .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // 5. 替换加粗
 }
+
 const newChat = () => {
   // 这里添加新会话的逻辑
   console.log('开始新会话')
   localStorage.removeItem('user_uuid')
   window.location.reload()
 }
-
 </script>
+
 <style scoped>
 .app-layout {
   display: flex;

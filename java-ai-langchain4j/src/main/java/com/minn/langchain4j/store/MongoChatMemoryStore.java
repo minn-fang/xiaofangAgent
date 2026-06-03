@@ -24,24 +24,30 @@ public class MongoChatMemoryStore implements ChatMemoryStore {
         
         @Override
         public List<ChatMessage> getMessages (Object memoryId) {
+                //从MongoDB数据库中获取指定memoryId的聊天记录
                 Criteria criteria = Criteria.where("memoryId").is(memoryId);
+                //创建查询对象
                 Query query = new Query(criteria);
+                //使用查询对象查询数据
                 ChatMessages chatMessages = mongoTemplate.findOne (query, ChatMessages.class);
                 if(chatMessages == null){
                         return  new LinkedList<> ();
                 }
+                //将JSON字符串转换为ChatMessage对象列表
                 String content = chatMessages.getContent ();
                 return ChatMessageDeserializer.messagesFromJson (content);
         }
         
         @Override
         public void updateMessages (Object memoryId, List<ChatMessage> list) {
+                //将新的聊天记录保存到MongoDB数据库中，criteria对象用于匹配指定的memoryId
                 Criteria criteria = Criteria.where("memoryId").is(memoryId);
                 Query query = new Query(criteria);
+                //创建更新对象
                 Update update = new Update();
-                
+                //序列化聊天记录
                 update.set("content", ChatMessageSerializer.messagesToJson ( list));
-                //修改或新增
+                //修改或新增，如果已存在则更新，否则新增
                 mongoTemplate.upsert(query, update, ChatMessages.class);
         }
         
