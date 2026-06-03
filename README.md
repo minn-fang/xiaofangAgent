@@ -1,5 +1,12 @@
 # xiaofangAgent
-小方施主（医疗版）是一套针对Java程序员的大模型应用项目（医疗人工智能客服系统），囊括LangChain4j+RAG+向量数据库+FunctionCalling+高德地图导航的一整套完整清晰的模型对接流程。小方施主是一个训练有素的医疗顾问和一个医疗伴诊助手，它能够为用户回答一些医院就诊中的常规问题，也可以基于当前临床实践和研究，针对患者提出的特定健康问题，提供详细、准确且使用的医疗建议。若需要进一步检查或就医，它也可以作为伴诊助手回答用户就医流程中的相关问题。例如，智能分导诊根据患者的病情和就医需求，智能推荐合适的科室和医生。又如，智能挂号助手，实现智能的预约挂号、智能取消挂号等服务。同时，也能满足患者对医院位置路线规划和导航。
+	小智医疗（医疗领域垂直智能体系统/后端/AI Agent）
+项目描述：基于LangChain4j构建医疗垂直领域智能问答与业务办理一体化Agent，融合RAG、ReAct推理框架与FunctionCalling，实现医疗问答、挂号预约及路线规划等业务闭环。
+	Agent架构与RAG优化：基于LangChain4j构建AIService动态代理架构，设计Agent + Memory + Tool一体化执行链路；基于PDFBox + TextEmbedding + Pinecone构建医疗知识库，通过语义分块与向量检索优化，提升复杂问答召回与抗幻觉能力。
+	FunctionCalling与业务工具：基于@Tool封装挂号、医务查询等业务逻辑，实现自然语言到Java方法的自动映射与参数校验，构建ReAct推理驱动的工具调用闭环。
+	流式交互与上下文管理：基于WebFlux + Reacto r实现SSE流式输出与背压控制，设计Redis + MongoDB 多级存储架构，利用 Redis 缓存活跃会话实现毫秒级上下文恢复，结合 MongoDB 持久化全量历史对话，多用户 @MemoryId 会话隔离与上下文持久化。
+	高德MCP集成与多模型适配：引入MCP协议对接高德地图服务，实现路径规划等能力的标准化调用；基于SPI机制实现DeepSeek/Qwen/Ollama多模型插件化接入与动态切换。
+技术栈：Java / LangChain4j / RAG / Agent / ReAct / MCP / Pinecone / Redis / MongoDB / WebFlux / Reactor / SpringBoot / 高德。
+
 
 <img width="1908" height="1063" alt="小方施主（医疗版）1" src="https://github.com/user-attachments/assets/f5189fec-37a2-449e-9210-c85c5ef6d8fb" />
 <img width="1915" height="1025" alt="小方施主（医疗版）2" src="https://github.com/user-attachments/assets/d52ddb76-0917-4890-8353-f21f339e50f3" />
