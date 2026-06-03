@@ -109,24 +109,30 @@ public class MultiLevelChatMemoryStore implements ChatMemoryStore {
                 String key = REDIS_KEY_PREFIX + memoryId;
                 
                 try {
-                        redisTemplate.delete(key);
+                        Boolean redisDeleted = redisTemplate.delete(key);
+                        if (redisDeleted) {
+                                log.info("Redis缓存删除成功: memoryId={}", memoryId);
+                        } else {
+                                log.warn("Redis缓存不存在: memoryId={}", memoryId);
+                        }
                 } catch (Exception e) {
-                        log.warn("Redis删除失败: {}", e.getMessage());
+                        log.error("Redis删除失败: memoryId={}, error={}", memoryId, e.getMessage());
                 }
                 
                 try {
                         Criteria criteria = Criteria.where("memoryId").is(memoryId.toString());
                         Query query = new Query(criteria);
                         mongoTemplate.remove(query, ChatMessages.class);
+                        log.info("MongoDB数据删除成功: memoryId={}", memoryId);
                 } catch (Exception e) {
-                        log.error("MongoDB删除失败: {}", e.getMessage());
+                        log.error("MongoDB删除失败: memoryId={}, error={}", memoryId, e.getMessage());
                 }
         }
         
         public void evictCache(Object memoryId) {
-                String key = REDIS_KEY_PREFIX + memoryId;
-                redisTemplate.delete(key);
-                log.info("手动清除缓存: memoryId={}", memoryId);
+                log.info("开始清除缓存: memoryId={}", memoryId);
+                deleteMessages(memoryId);
+                log.info("缓存清除完成: memoryId={}", memoryId);
         }
         
         private List<ChatMessage> deserializeMessages(String json) {

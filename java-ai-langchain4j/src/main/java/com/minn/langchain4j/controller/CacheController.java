@@ -16,7 +16,7 @@ public class CacheController {
         
         @Operation(summary = "清除指定会话缓存")
         @DeleteMapping("/memory/{memoryId}")
-        public String evictMemoryCache(@PathVariable Long memoryId) {
+        public String evictMemoryCache(@PathVariable("memoryId") Long memoryId) {
                 multiLevelStore.evictCache(memoryId);
                 return "缓存已清除: memoryId=" + memoryId;
         }
