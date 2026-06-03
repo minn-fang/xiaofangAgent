@@ -1,5 +1,6 @@
 # xiaofangAgent
 	小智医疗（医疗领域垂直智能体系统/后端/AI Agent）
+
 项目描述：基于LangChain4j构建医疗垂直领域智能问答与业务办理一体化Agent，融合RAG、ReAct推理框架与FunctionCalling，实现医疗问答、挂号预约及路线规划等业务闭环。
 
 	Agent架构与RAG优化：基于LangChain4j构建AIService动态代理架构，设计Agent + Memory + Tool一体化执行链路；基于PDFBox + TextEmbedding + Pinecone构建医疗知识库，通过语义分块与向量检索优化，提升复杂问答召回与抗幻觉能力。
