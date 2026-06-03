@@ -20,7 +20,9 @@
 <img width="1914" height="1070" alt="小方施主（医疗版）4" src="https://github.com/user-attachments/assets/eebbddcf-1ff1-4c70-8e53-64a643bb3882" />
 <img width="1919" height="1072" alt="小方施主（医疗版）5" src="https://github.com/user-attachments/assets/eb1566fd-a062-4fd4-912c-303f62b285e4" />
 <img width="700" height="153" alt="小方施主（医疗版）数据库" src="https://github.com/user-attachments/assets/2d3595da-88e1-4c6d-b0c0-95c564cd9b46" />
-<img width="1200" height="2670" alt="小方施主（医疗版，手机页面）" src="https://github.com/user-attachments/assets/ae7d7de5-5655-4f1b-9d1a-de1658875b53" />
+<img width="1200" height="2670" alt="小方施主（医疗版，手机页面）" src="https://github.com/user-attachments/assets/04edf564-1a9e-4e83-872c-0523014454f6" />
+<img width="1200" height="2670" alt="小方施主（医疗版，手机页面）2" src="https://github.com/user-attachments/assets/55ad1db4-39cd-46a3-a305-983b305521a2" />
+
 
 
 
