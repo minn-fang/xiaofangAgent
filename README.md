@@ -14,7 +14,7 @@
 技术栈：Java / LangChain4j / RAG / Agent / ReAct / MCP / Pinecone / Redis / MongoDB / WebFlux / Reactor / SpringBoot / 高德。
 
 
-<img width="1908" height="1063" alt="小方施主（医疗版）1" src="https://github.com/user-attachments/assets/f5189fec-37a2-449e-9210-c85c5ef6d8fb" />
+<img width="2550" height="1275" alt="小方施主（医疗版）1" src="https://github.com/user-attachments/assets/21b84e54-97ca-4b7e-9675-e8284e50b66f" />
 <img width="1915" height="1025" alt="小方施主（医疗版）2" src="https://github.com/user-attachments/assets/d52ddb76-0917-4890-8353-f21f339e50f3" />
 <img width="1905" height="1016" alt="小方施主（医疗版）3" src="https://github.com/user-attachments/assets/6393e4b2-2ea0-4eae-a0d2-a294163ab3ce" />
 <img width="1914" height="1070" alt="小方施主（医疗版）4" src="https://github.com/user-attachments/assets/eebbddcf-1ff1-4c70-8e53-64a643bb3882" />
